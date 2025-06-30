@@ -1,0 +1,69 @@
+.comparison-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 16px; // This creates the space between cards
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.garanties-column, .needs-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.garanties-column {
+  flex: 0 0 200px; // Fixed width
+}
+
+.needs-column {
+  flex: 0 0 150px; // Fixed width
+}
+
+.offer-card {
+  flex: 1 1 0; // Distribute remaining space equally
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: box-shadow .3s;
+
+  &:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+}
+
+.grid-header, .grid-cell, .grid-footer {
+  padding: 1rem 0.75rem;
+  text-align: center;
+}
+
+.grid-header {
+  font-weight: 600;
+}
+
+.card-header, .card-footer {
+    background-color: #f8f9fa;
+}
+
+.garanties-column .grid-cell {
+  text-align: left;
+  font-weight: 500;
+}
+
+.grid-footer {
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cell-good {
+  color: #16a34a; /* Green-600 */
+  font-weight: 600;
+}
+
+.cell-bad {
+  color: #dc2626; /* Red-600 */
+}
