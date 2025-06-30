@@ -424,4 +424,4 @@ export class CompareComponent implements OnInit {
     this.comparisonTableData = tableData;
     this.comparisonTableHighlights = highlightData;
   }
-}
+} 
