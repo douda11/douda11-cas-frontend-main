@@ -74,6 +74,16 @@ export class CompareComponent implements OnInit {
   displayedOffers: ResultatComparaison[] = [];
   minDate: Date;
 
+  specialGaranties: string[] = [
+    'Hospitalisation',
+    'Chambre Particulière',
+    'Soins Courants',
+    'Dentaire',
+    'Orthodontie',
+    'Forfait Optique',
+    'Forfait Dentaire'
+  ];
+
   civiliteOptions = [{ label: 'Monsieur', value: 'Monsieur' }, { label: 'Madame', value: 'Madame' }];
   sexeOptions = [{ label: 'Garçon', value: 'garcon' }, { label: 'Fille', value: 'fille' }];
   EtatcivilOptions = [
@@ -359,6 +369,10 @@ export class CompareComponent implements OnInit {
     return this.comparisonResults && this.comparisonResults.length > 0;
   }
 
+  isSpecialGarantie(garantie: string): boolean {
+    return this.specialGaranties.includes(garantie);
+  }
+
   prepareComparisonTable(): void {
     const clientNeeds = this.insuranceForm.get('coverageSliders')?.value;
     if (!clientNeeds) {
@@ -367,7 +381,7 @@ export class CompareComponent implements OnInit {
       return;
     }
 
-    this.displayedOffers = this.comparisonResults.slice(0, 5);
+        this.displayedOffers = this.comparisonResults.slice(0, 5);
 
     this.tableColumns = [
       { field: 'garantie', header: 'Garantie' },
@@ -389,8 +403,43 @@ export class CompareComponent implements OnInit {
       { key: 'forfaitDentaire', label: 'Forfait Dentaire', unit: '€' }
     ];
 
-    const tableData: any[] = [];
+        const tableData: any[] = [];
     const highlightData: any[] = [];
+
+    // Add Assureur row
+    const assureurRow: { [key: string]: any } = {
+      garantie: 'Assureur',
+      besoin: ''
+    };
+    this.displayedOffers.forEach((offer, index) => {
+      const parts = offer.nomDeLOffre.split('_');
+      assureurRow[`offre-${index}`] = parts.length > 0 ? parts[0] : offer.nomDeLOffre;
+    });
+    tableData.push(assureurRow);
+    highlightData.push({}); // No highlights for this row
+
+    // Add Produit row
+    const produitRow: { [key: string]: any } = {
+      garantie: 'Produit',
+      besoin: ''
+    };
+    this.displayedOffers.forEach((offer, index) => {
+      const parts = offer.nomDeLOffre.split('_');
+      produitRow[`offre-${index}`] = parts.length > 1 ? parts.slice(1).join('_') : '';
+    });
+    tableData.push(produitRow);
+    highlightData.push({}); // No highlights for this row
+
+    // Add formula number row
+    const formulaRow: { [key: string]: any } = {
+      garantie: 'Formule',
+      besoin: ''
+    };
+    this.displayedOffers.forEach((offer, index) => {
+      formulaRow[`offre-${index}`] = `Formule ${offer.formule}`;
+    });
+    tableData.push(formulaRow);
+    highlightData.push({}); // No highlights for this row
 
     garantiesMap.forEach(garantie => {
       const clientNeedValue = clientNeeds[garantie.key] ?? 0;

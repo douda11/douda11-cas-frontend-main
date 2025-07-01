@@ -453,12 +453,14 @@
 
             <!-- Results Table -->
            <!-- Results Display: Custom Flexbox Column Layout -->
-<div *ngIf="hasResults() && !submitting" class="comparison-grid">
+<div *ngIf="hasResults() && !submitting">
+  <div class="comparison-container">
+    <div class="comparison-grid">
 
   <!-- Guarantees Column -->
   <div class="garanties-column">
-    <div class="grid-header">Garantie</div>
-    <div *ngFor="let row of comparisonTableData" class="grid-cell garanties-cell">{{ row.garantie }}</div>
+    <div class="grid-header"></div>
+    <div *ngFor="let row of comparisonTableData" class="grid-cell garanties-cell" [ngClass]="{ 'special-garantie': isSpecialGarantie(row.garantie), 'assureur-row': row.garantie === 'Assureur', 'produit-row': row.garantie === 'Produit', 'formule-row': row.garantie === 'Formule' }">{{ row.garantie }}</div>
     <div class="grid-footer"></div>
   </div>
 
@@ -473,13 +475,15 @@
   <div *ngFor="let offer of displayedOffers; let j = index" class="offer-card">
     <!-- Card Header -->
     <div class="grid-header card-header">
-      <div class="font-semibold">{{ offer.nomDeLOffre }}</div>
-      <div class="font-normal text-primary">{{ offer.tarifMensuel | currency:'EUR':'symbol':'1.2-2' }} / mois</div>
+      <div class="font-normal text-primary">{{ offer.tarifMensuel | currency:'EUR':'symbol':'1.2-2' }}</div>
     </div>
     <!-- Card Body -->
     <div *ngFor="let row of comparisonTableData; let i = index" class="grid-cell" [ngClass]="{
         'cell-good': comparisonTableHighlights[i] && comparisonTableHighlights[i]['offre-' + j] === 'good',
-        'cell-bad': comparisonTableHighlights[i] && comparisonTableHighlights[i]['offre-' + j] === 'bad'
+        'cell-bad': comparisonTableHighlights[i] && comparisonTableHighlights[i]['offre-' + j] === 'bad',
+        'assureur-row': row.garantie === 'Assureur',
+        'produit-row': row.garantie === 'Produit',
+        'formule-row': row.garantie === 'Formule'
       }">
       {{ row['offre-' + j] }}
     </div>
@@ -487,6 +491,8 @@
     <div class="grid-footer card-footer">
       <p-button label="Choisir" icon="pi pi-check" styleClass="p-button-sm"></p-button>
     </div>
+  </div>
+</div>
   </div>
 </div>
           </div>

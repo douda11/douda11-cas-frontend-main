@@ -20,6 +20,8 @@ export interface ResultatComparaison {
   score?: number;
   details: Details;
   tarifMensuel?: number | null;
+  assureur?: string;
+  produit?: string;
 }
 
 // Interface for the request payload sent to the backend comparator API.

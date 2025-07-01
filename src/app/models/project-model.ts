@@ -54,6 +54,7 @@ export interface InsuranceQuoteForm {
 
 // Response interfaces for API calls
 export interface PriceQuote {
+  productName?: string; // Add the productName property
   monthlyPayment: number;
   annualPayment: number;
   raw?: any; // To store the original, unprocessed quote data

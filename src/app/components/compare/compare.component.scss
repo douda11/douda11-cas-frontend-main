@@ -1,75 +1,112 @@
+// Main container for the comparison section
+.comparison-container {
+  width: 100%;
+  overflow-x: auto; // Enable horizontal scrolling to handle wide content
+  -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+  padding: 2rem 0;
+}
+
+// The flexbox grid for the table
 .comparison-grid {
   display: flex;
-  gap: 1rem; /* Espacement entre les colonnes */
-  width: 100%;
-  align-items: stretch; /* Assure que toutes les colonnes ont la même hauteur */
-}
-
-.garanties-column,
-.needs-column,
-.offer-card {
-  flex: 1; /* Toutes les colonnes ont la même largeur */
-  min-width: 0; /* Évite le dépassement */
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #e0e0e0; /* Bordure légère pour chaque colonne */
+  min-width: 1000px; // A sensible minimum width
+  border: 1px solid #dee2e6;
   border-radius: 8px;
   overflow: hidden;
+  font-size: 0.9rem;
+}
+
+// First column (Garanties)
+.garanties-column {
+  flex: 0 0 200px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8f9fa;
+  border-right: 1px solid #dee2e6;
+}
+
+// Offer columns
+.offer-card {
+  flex: 1 1 auto; // Allow cards to grow but not shrink below content size
+  display: flex;
+  flex-direction: column;
   background-color: #ffffff;
-}
-
-.grid-header,
-.card-header {
-  padding: 0.5rem 0.75rem; /* Ajustement du padding pour plus d'espace vertical */
-  font-size: 0.55rem; /* Taille de police réduite pour une meilleure lisibilité */
-  font-weight: 600;
-  background-color: #f8f9fa;
+  border-left: 1px solid #dee2e6;
   text-align: center;
-  height: 90px; /* Hauteur fixe pour accommoder le texte sur deux lignes */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-bottom: 1px solid #e0e0e0;
-  line-height: 1.3; /* Améliore la lisibilité du texte enveloppé */
-  word-wrap: break-word; /* Assure que les mots longs ne dépassent pas */
 }
 
+// General cell styling
 .grid-cell {
-  padding: 1rem 0.75rem;
-  text-align: center;
-  border-bottom: 1px solid #e0e0e0;
-  min-height: 60px; /* Hauteur minimale pour les cellules de données */
+  padding: 0.5rem 0.75rem;
+  min-height: 45px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-bottom: 1px solid #dee2e6;
+  &:last-of-type {
+    border-bottom: none;
+  }
 }
 
-/* Alignement spécifique pour la colonne des garanties */
+// Specific styling for the first column's cells
 .garanties-column .grid-cell {
-  justify-content: flex-start; /* Aligner le texte à gauche */
+  justify-content: flex-start;
   text-align: left;
-  font-weight: 500;
+  color: #343a40;
 }
 
-.grid-footer,
-.card-footer {
-  padding: 1rem 0.75rem;
-  text-align: center;
-  min-height: 65px;
+// Header and Footer styling
+.grid-header, .card-header, .grid-footer, .card-footer {
+  padding: 0.75rem;
+  background-color: #f8f9fa;
+}
+
+.grid-header, .card-header {
+  font-weight: bold;
+  border-bottom: 1px solid #dee2e6;
+  min-height: 60px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #f8f9fa;
-  border-bottom: none; /* Le footer est le dernier élément */
 }
 
-/* Styles pour les cellules "bonnes" et "mauvaises" */
+.grid-footer, .card-footer {
+  margin-top: auto;
+  border-top: 1px solid #dee2e6;
+}
+
+.card-header {
+  font-size: 1.1rem;
+}
+
+// Row-specific styling
+.assureur-row, .produit-row {
+  text-align: left;
+  justify-content: flex-start;
+  font-weight: bold;
+  white-space: nowrap; // Keep content on a single line
+}
+
+.assureur-row {
+  color: #eb29d4 !important; // Baby pink
+}
+
+.produit-row {
+  color: rgb(66, 154, 242) !important; // Blue
+}
+
+.formule-row {
+  color: #495057; // Light black
+  font-weight: bold !important; // Ensure this is always bold
+}
+
+// Cell highlighting
 .cell-good {
-  color: #16a34a; /* Vert */
-  font-weight: 600;
+  background-color: #d4edda !important;
+  color: #0cc838 !important;
 }
 
 .cell-bad {
-  color: #dc2626; /* Rouge */
-  font-weight: 600;
+  background-color: #f8d7da !important;
+  color: #df1227 !important;
 }
