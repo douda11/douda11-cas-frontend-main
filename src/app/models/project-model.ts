@@ -56,7 +56,7 @@ export interface InsuranceQuoteForm {
 export interface PriceQuote {
   monthlyPayment: number;
   annualPayment: number;
-  totalPayment?: number;
+  raw?: any; // To store the original, unprocessed quote data
   coverageDetails?: any;
   additionalInfo?: any;
 }

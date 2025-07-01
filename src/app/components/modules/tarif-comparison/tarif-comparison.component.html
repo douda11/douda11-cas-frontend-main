@@ -516,79 +516,35 @@
                             <div class="col-12">
                                 <h3 class="text-lg font-medium mb-3">Comparaison détaillée</h3>
                                 
+                                <style>
+    .comparison-table .p-datatable-tbody > tr > td {
+        vertical-align: middle;
+    }
+</style>
                                 <div class="comparison-table">
-                                    <p-table [value]="[1]" styleClass="p-datatable-striped">
+                                    <p-table [value]="[1]" styleClass="p-datatable-striped" [tableStyle]="{'table-layout': 'fixed', 'width': '100%'}">
                                         <ng-template pTemplate="header">
                                             <tr>
-                                                <th>Critères</th>
-                                                <th class="text-center">APRIL</th>
-                                                <th class="text-center">UTWIN</th>
-                                                <th class="text-center">Différence</th>
+                                                <th style="width: 40%;">Critères</th>
+                                                <th class="text-center" style="width: 20%; white-space: nowrap;">APRIL</th>
+                                                <th class="text-center" style="width: 20%; white-space: nowrap;">UTWIN</th>
+                                                <th class="text-center" style="width: 20%; white-space: nowrap;">Différence</th>
                                             </tr>
                                         </ng-template>
                                         <ng-template pTemplate="body" let-rowData>
                                             <tr>                                                <td><strong>Prime mensuelle</strong></td>
                                                 <td class="text-center">
-                                                    <span *ngIf="comparisonResult.april?.quotes?.length">{{ getAprilMonthlyPayment() | currency:'EUR' }}</span>
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'april' && isAprilMonthlyBetter()" 
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span *ngIf="comparisonResult.utwin?.quotes?.length">{{ getUtwinMonthlyPayment() | currency:'EUR' }}</span>
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'utwin' && !isAprilMonthlyBetter()"
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span [class]="getMonthlyDifferenceClass()">
-                                                        {{ getMonthlyPaymentDifference() | currency:'EUR' }}
-                                                    </span>
-                                                </td>
+                                                 
+                                                
                                             </tr>
                                             <tr>                                                <td><strong>Prime annuelle</strong></td>
-                                                <td class="text-center">
-                                                    {{ getAprilAnnualPayment() | currency:'EUR' }}
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'april' && isAprilAnnualBetter()" 
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ getUtwinAnnualPayment() | currency:'EUR' }}
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'utwin' && isUtwinAnnualBetter()" 
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span [class]="getAnnualDifferenceClass()">
-                                                        {{ getAnnualPaymentDifference() | currency:'EUR' }}
-                                                    </span>
-                                                </td>
-                                            </tr>                                            <tr *ngIf="showTotalPaymentRow()">
-                                                <td><strong>Coût total</strong></td>
-                                                <td class="text-center">
-                                                    {{ getAprilTotalPayment() | currency:'EUR' }}
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'april' && isAprilTotalBetter()" 
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    {{ getUtwinTotalPayment() | currency:'EUR' }}
-                                                    <p-tag 
-                                                        *ngIf="comparisonResult?.bestOffer === 'utwin' && isUtwinTotalBetter()" 
-                                                        severity="success" value="Meilleur tarif">
-                                                    </p-tag>
-                                                </td>
-                                                <td class="text-center">
-                                                    <span [class]="getTotalDifferenceClass()">
-                                                        {{ getTotalPaymentDifference() | currency:'EUR' }}
-                                                    </span>
-                                                </td>
+                                          
+                                            <!-- Guarantees Section -->
+                                            <tr *ngFor="let guarantee of combinedGuarantees">
+                                                <td><strong>{{ guarantee.name }}</strong></td>
+                                                <td class="text-center">{{ guarantee.april }}</td>
+                                                <td class="text-center">{{ guarantee.utwin }}</td>
+                                                <td class="text-center">-</td>
                                             </tr>
                                         </ng-template>
                                     </p-table>

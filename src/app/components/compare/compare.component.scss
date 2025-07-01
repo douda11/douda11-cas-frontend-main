@@ -1,69 +1,75 @@
 .comparison-grid {
   display: flex;
-  flex-direction: row;
-  gap: 16px; // This creates the space between cards
+  gap: 1rem; /* Espacement entre les colonnes */
   width: 100%;
-  overflow-x: hidden;
+  align-items: stretch; /* Assure que toutes les colonnes ont la même hauteur */
 }
 
-.garanties-column, .needs-column {
-  display: flex;
-  flex-direction: column;
-}
-
-.garanties-column {
-  flex: 0 0 200px; // Fixed width
-}
-
-.needs-column {
-  flex: 0 0 150px; // Fixed width
-}
-
+.garanties-column,
+.needs-column,
 .offer-card {
-  flex: 1 1 0; // Distribute remaining space equally
+  flex: 1; /* Toutes les colonnes ont la même largeur */
+  min-width: 0; /* Évite le dépassement */
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
+  border: 1px solid #e0e0e0; /* Bordure légère pour chaque colonne */
   border-radius: 8px;
   overflow: hidden;
-  transition: box-shadow .3s;
-
-  &:hover {
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
+  background-color: #ffffff;
 }
 
-.grid-header, .grid-cell, .grid-footer {
+.grid-header,
+.card-header {
+  padding: 0.5rem 0.75rem; /* Ajustement du padding pour plus d'espace vertical */
+  font-size: 0.55rem; /* Taille de police réduite pour une meilleure lisibilité */
+  font-weight: 600;
+  background-color: #f8f9fa;
+  text-align: center;
+  height: 90px; /* Hauteur fixe pour accommoder le texte sur deux lignes */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e0e0e0;
+  line-height: 1.3; /* Améliore la lisibilité du texte enveloppé */
+  word-wrap: break-word; /* Assure que les mots longs ne dépassent pas */
+}
+
+.grid-cell {
   padding: 1rem 0.75rem;
   text-align: center;
-}
-
-.grid-header {
-  font-weight: 600;
-}
-
-.card-header, .card-footer {
-    background-color: #f8f9fa;
-}
-
-.garanties-column .grid-cell {
-  text-align: left;
-  font-weight: 500;
-}
-
-.grid-footer {
-  min-height: 65px;
+  border-bottom: 1px solid #e0e0e0;
+  min-height: 60px; /* Hauteur minimale pour les cellules de données */
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
+/* Alignement spécifique pour la colonne des garanties */
+.garanties-column .grid-cell {
+  justify-content: flex-start; /* Aligner le texte à gauche */
+  text-align: left;
+  font-weight: 500;
+}
+
+.grid-footer,
+.card-footer {
+  padding: 1rem 0.75rem;
+  text-align: center;
+  min-height: 65px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f8f9fa;
+  border-bottom: none; /* Le footer est le dernier élément */
+}
+
+/* Styles pour les cellules "bonnes" et "mauvaises" */
 .cell-good {
-  color: #16a34a; /* Green-600 */
+  color: #16a34a; /* Vert */
   font-weight: 600;
 }
 
 .cell-bad {
-  color: #dc2626; /* Red-600 */
+  color: #dc2626; /* Rouge */
+  font-weight: 600;
 }

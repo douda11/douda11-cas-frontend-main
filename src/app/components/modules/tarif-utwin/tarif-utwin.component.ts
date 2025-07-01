@@ -158,7 +158,6 @@ export class TarifUtwinComponent extends BaseWizardComponent implements OnInit {
                   monthlyPayment: mapped.monthlyPrice ?? 0,
                   annualPayment: mapped.annualPrice ?? 0,
                   additionalInfo: mapped.echeances,
-                  totalPayment: undefined,
                   coverageDetails: undefined
                 }],
                 errorMessage: undefined

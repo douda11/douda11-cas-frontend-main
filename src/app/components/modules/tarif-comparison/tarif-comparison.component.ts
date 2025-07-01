@@ -58,6 +58,7 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
   hasError: boolean = false;
   errorMessage: string = '';
   isLoading: boolean = false;
+  combinedGuarantees: any[] = [];
 
   constructor(
     protected override formService: FormService,
@@ -257,6 +258,7 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
               bestOffer: 'april'
             };
 
+            this.processGuarantees();
             this.updateChartData();
           } else {
             this.hasError = true;
@@ -291,6 +293,57 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
     this.comparisonResult = null;
     this.hasError = false;
     this.errorMessage = '';
+  }
+
+  processGuarantees(): void {
+    this.combinedGuarantees = [];
+    if (!this.comparisonResult) return;
+
+    const aprilQuote = this.comparisonResult.april?.quotes?.[0];
+    const utwinQuote = this.comparisonResult.utwin?.quotes?.[0];
+
+    const guaranteeMap = new Map<string, any>();
+
+    // Helper to initialize a guarantee entry
+    const initGuarantee = (code: string) => {
+      if (!guaranteeMap.has(code)) {
+        guaranteeMap.set(code, {
+          name: this.getGuaranteeName(code),
+          april: '-',
+          utwin: '-'
+        });
+      }
+    };
+
+    // Process APRIL guarantees
+    if (aprilQuote?.raw?.coverages) {
+      for (const cov of aprilQuote.raw.coverages) {
+        initGuarantee(cov.guaranteeCode);
+        guaranteeMap.get(cov.guaranteeCode).april = `Niveau ${cov.levelCode}`;
+      }
+    }
+
+    // Process UTWIN guarantees
+    if (utwinQuote?.raw?.coverages) {
+      for (const cov of utwinQuote.raw.coverages) {
+        initGuarantee(cov.guaranteeCode);
+        guaranteeMap.get(cov.guaranteeCode).utwin = `Niveau ${cov.levelCode}`;
+      }
+    }
+
+    this.combinedGuarantees = Array.from(guaranteeMap.values());
+  }
+
+  getGuaranteeName(code: string): string {
+    const names: { [key: string]: string } = {
+      'HOSP': 'Hospitalisation',
+      'CS': 'Soins Courants',
+      'OPTI': 'Optique',
+      'DENT': 'Dentaire',
+      'AC': 'Autres Soins',
+      'BE': 'Bien-être & Prévention'
+    };
+    return names[code] || code;
   }
 
   override markFormGroupTouched(formGroup: FormGroup): void {
@@ -395,7 +448,6 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
           data: [
             aprilQuote?.monthlyPayment || 0, 
             aprilQuote?.annualPayment || 0, 
-            aprilQuote?.totalPayment || 0
           ]
         },
         {
@@ -409,7 +461,6 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
           data: [
             utwinQuote?.monthlyPayment || 0, 
             utwinQuote?.annualPayment || 0, 
-            utwinQuote?.totalPayment || 0
           ]
         }
       ]
@@ -475,6 +526,21 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
   }
 
   // Helper methods to safely get and compare quote values
+
+
+ 
+
+
+
+
+
+
+ 
+
+
+
+ 
+  // Helper methods to safely get and compare quote values
   getAprilMonthlyPayment(): number {
     return this.comparisonResult?.april?.quotes?.[0]?.monthlyPayment || 0;
   }
@@ -491,85 +557,28 @@ export class TarifComparisonComponent extends BaseWizardComponent implements OnI
     return this.comparisonResult?.utwin?.quotes?.[0]?.annualPayment || 0;
   }
 
-  getAprilTotalPayment(): number {
-    return this.comparisonResult?.april?.quotes?.[0]?.totalPayment || 0;
-  }
-
-  getUtwinTotalPayment(): number {
-    return this.comparisonResult?.utwin?.quotes?.[0]?.totalPayment || 0;
-  }
-
-  isAprilMonthlyBetter(): boolean {
-    const aprilValue = this.getAprilMonthlyPayment();
-    const utwinValue = this.getUtwinMonthlyPayment();
-    return aprilValue > 0 && utwinValue > 0 && aprilValue < utwinValue;
-  }
-
-  isUtwinMonthlyBetter(): boolean {
-    const aprilValue = this.getAprilMonthlyPayment();
-    const utwinValue = this.getUtwinMonthlyPayment();
-    return aprilValue > 0 && utwinValue > 0 && utwinValue < aprilValue;
-  }
-
-  isAprilAnnualBetter(): boolean {
-    const aprilValue = this.getAprilAnnualPayment();
-    const utwinValue = this.getUtwinAnnualPayment();
-    return aprilValue > 0 && utwinValue > 0 && aprilValue < utwinValue;
-  }
-
-  isUtwinAnnualBetter(): boolean {
-    const aprilValue = this.getAprilAnnualPayment();
-    const utwinValue = this.getUtwinAnnualPayment();
-    return aprilValue > 0 && utwinValue > 0 && utwinValue < aprilValue;
-  }
-
-  isAprilTotalBetter(): boolean {
-    const aprilValue = this.getAprilTotalPayment();
-    const utwinValue = this.getUtwinTotalPayment();
-    return aprilValue > 0 && utwinValue > 0 && aprilValue < utwinValue;
-  }
-
-  isUtwinTotalBetter(): boolean {
-    const aprilValue = this.getAprilTotalPayment();
-    const utwinValue = this.getUtwinTotalPayment();
-    return aprilValue > 0 && utwinValue > 0 && utwinValue < aprilValue;
-  }
-
   getMonthlyPaymentDifference(): number {
-    return this.getAprilMonthlyPayment() - this.getUtwinMonthlyPayment();
+    const aprilPayment = this.getAprilMonthlyPayment();
+    const utwinPayment = this.getUtwinMonthlyPayment();
+    if (aprilPayment > 0 && utwinPayment > 0) {
+      return aprilPayment - utwinPayment;
+    }
+    return 0;
   }
 
   getAnnualPaymentDifference(): number {
-    return this.getAprilAnnualPayment() - this.getUtwinAnnualPayment();
+    const aprilPayment = this.getAprilAnnualPayment();
+    const utwinPayment = this.getUtwinAnnualPayment();
+    if (aprilPayment > 0 && utwinPayment > 0) {
+      return aprilPayment - utwinPayment;
+    }
+    return 0;
   }
 
-  getTotalPaymentDifference(): number {
-    return this.getAprilTotalPayment() - this.getUtwinTotalPayment();
-  }
-
-  getMonthlyDifferenceClass(): string {
-    const diff = this.getMonthlyPaymentDifference();
-    if (diff > 0) return 'text-green-600 font-bold';
-    if (diff < 0) return 'text-red-600 font-bold';
+  getDifferenceClass(diff: number): string {
+    if (diff > 0) return 'text-red-600 font-bold'; // April is more expensive
+    if (diff < 0) return 'text-green-600 font-bold'; // April is cheaper
     return '';
-  }
-
-  getAnnualDifferenceClass(): string {
-    const diff = this.getAnnualPaymentDifference();
-    if (diff > 0) return 'text-green-600 font-bold';
-    if (diff < 0) return 'text-red-600 font-bold';
-    return '';
-  }
-
-  getTotalDifferenceClass(): string {
-    const diff = this.getTotalPaymentDifference();
-    if (diff > 0) return 'text-green-600 font-bold';
-    if (diff < 0) return 'text-red-600 font-bold';
-    return '';
-  }
-
-  showTotalPaymentRow(): boolean {
-    return !!this.getAprilTotalPayment() || !!this.getUtwinTotalPayment();
   }
 
   override submitForm(): void {
